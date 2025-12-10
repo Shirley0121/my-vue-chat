@@ -1,7 +1,7 @@
 <template>
   <article id="contact" class="panel">
     <h2>Type your question here</h2>
-
+<div class="page-title">🚀 Vue 聊天应用 v1.0</div>
     <main>
       <!-- List of messages -->
       <div class="chat-container">
@@ -245,4 +245,13 @@ function clearChat() {
 
 .clear-btn:hover {
   background-color: #ff5252;
+}
+.page-title {
+  text-align: center;
+  color: #4a6fa5;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #f0f8ff;
+  border-radius: 8px;
 }
