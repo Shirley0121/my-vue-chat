@@ -62,6 +62,9 @@
           </svg>
         </button>
       </form>
+      <button @click="clearChat" class="clear-btn" style="margin-top: 1rem; padding: 0.5rem 1rem; background-color: #ff6b6b; color: white; border: none; border-radius: 6px; cursor: pointer;">
+  clearChat
+</button>
     </main>
   </article>
 </template>
@@ -149,6 +152,11 @@ async function getServerResponse(message_priv) {
 function saveToSession() {
   sessionStorage.setItem('user_messages', JSON.stringify(user_messages.value))
 }
+// 7.清空聊天记录
+function clearChat() {
+  user_messages.value = []
+  sessionStorage.removeItem('user_messages')
+}
 </script>
 
 
@@ -225,4 +233,16 @@ function saveToSession() {
 .flex-form {
   display: flex;
   gap: 0.5rem;
+}
+.clear-btn {
+  padding: 0.5rem 1rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: #ff5252;
 }
