@@ -1,7 +1,8 @@
 <template>
   <article id="contact" class="panel">
     <h2>Type your question here</h2>
-<div class="page-title">🚀 Vue 聊天应用 v1.0</div>
+<div class="page-title">🚀 Vue chatapp
+   v1.0</div>
     <main>
       <!-- List of messages -->
       <div class="chat-container">
@@ -138,14 +139,34 @@ async function sendMessage() {
   saveToSession()
 }
 
-// 5. ВРЕМЕННАЯ ЗАГЛУШКА "СЕРВЕРА" В БРАУЗЕРЕ
-// На этом этапе можно тестировать весь чат без реального backend
+// 5. 连接 DeepSeek API（带记忆功能）
 async function getServerResponse(message_priv) {
-  // Имитируем задержку сети (~0.5 сек)
-  await new Promise(resolve => setTimeout(resolve, 500))
+  // 考试模式用单独的 session_id
+  let sessionId = localStorage.getItem('chat_session_id_exam');
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem('chat_session_id_exam', sessionId);
+  }
 
-  // Возвращаем тестовый ответ
-  return 'Тестовый ответ сервера на: **' + message_priv + '**'
+  const url = 'http://localhost:8080/api/chat'
+  const data = {
+    session_id: sessionId,
+    mode: "exam",
+    messages: [{ role: 'user', content: message_priv }]
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    const response = await res.json()
+    return response?.answer ?? '没有收到回复'
+  } catch (err) {
+    console.error('API 请求失败:', err)
+    return '抱歉，现在无法连接到 AI 服务，请稍后再试。'
+  }
 }
 
 // 6. Сохранение истории чата
